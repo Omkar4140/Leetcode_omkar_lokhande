@@ -3,10 +3,10 @@ WITH cte AS
         d.name AS Department,
         e.salary AS Salary,
 
-        MAX(e.salary)OVER(PARTITION BY e.departmentId) as maxSalary
+        DENSE_RANK()OVER(PARTITION BY e.departmentId ORDER BY e.salary DESC) as RK
 FROM Employee e
 LEFT JOIN Department d
 ON e.departmentId = d.id)
 SELECT Department, Employee, Salary
 FROM cte
-WHERE salary= maxSalary
+WHERE RK =1;
